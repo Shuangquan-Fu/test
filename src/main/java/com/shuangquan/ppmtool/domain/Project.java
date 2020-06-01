@@ -9,14 +9,15 @@ import java.util.Date;
 
 @Entity
 public class Project {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @NotBlank(message = "Project name is Required")
+    @NotBlank(message = "Project name is required")
     private String projectName;
-    @NotBlank(message = "Project Identifier is Required")
-    @Size(min = 4, max = 5, message = "Please use 4 to 5 characters")
-    @Column(updatable = false,unique = true)
+    @NotBlank(message ="Project Identifier is required")
+    @Size(min=4, max=5, message = "Please use 4 to 5 characters")
+    @Column(updatable = false, unique = true)
     private String projectIdentifier;
     @NotBlank(message = "Project description is required")
     private String description;
@@ -30,16 +31,6 @@ public class Project {
     private Date updated_At;
 
     public Project() {
-    }
-
-
-    @PrePersist
-    protected void onCreate(){
-        this.created_At = new Date();
-    }
-    @PreUpdate
-    protected void onUpdate(){
-        this.updated_At = new Date();
     }
 
     public Long getId() {
@@ -105,4 +96,15 @@ public class Project {
     public void setUpdated_At(Date updated_At) {
         this.updated_At = updated_At;
     }
+
+    @PrePersist
+    protected void onCreate(){
+        this.created_At = new Date();
+    }
+
+    @PreUpdate
+    protected void onUpdate(){
+        this.updated_At = new Date();
+    }
+
 }
