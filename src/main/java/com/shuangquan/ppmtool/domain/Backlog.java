@@ -1,9 +1,8 @@
 package com.shuangquan.ppmtool.domain;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import javax.persistence.*;
 
 @Entity
 public class Backlog {
@@ -12,8 +11,14 @@ public class Backlog {
     private Long id;
     private Integer PTSequence = 0;
     private String projectIdentifier;
-    //one to one with project
-    // one to many with project tasks
+
+    //OneToOne with project
+
+
+
+
+
+// one to many with project tasks
 
     public Backlog() {
     }
