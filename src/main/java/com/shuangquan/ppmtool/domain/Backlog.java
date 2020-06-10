@@ -3,6 +3,7 @@ package com.shuangquan.ppmtool.domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 public class Backlog {
@@ -14,10 +15,17 @@ public class Backlog {
 
     //OneToOne with project
 
+    //oneTomany
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL,mappedBy = "backlog")
+    private List<ProjectTask> projectTasks;
 
+    public List<ProjectTask> getProjectTasks() {
+        return projectTasks;
+    }
 
-
-
+    public void setProjectTasks(List<ProjectTask> projectTasks) {
+        this.projectTasks = projectTasks;
+    }
 // one to many with project tasks
 
     public Backlog() {

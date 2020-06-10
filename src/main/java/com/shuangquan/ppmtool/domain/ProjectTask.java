@@ -1,5 +1,7 @@
 package com.shuangquan.ppmtool.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.util.Date;
@@ -22,6 +24,19 @@ public class ProjectTask {
     //many to one with backlog
     @Column(updatable = false)
     private String projectIdentifier;
+
+    @ManyToOne(fetch = FetchType.EAGER,cascade = CascadeType.REFRESH)
+    @JsonIgnore
+    private Backlog backlog;
+    public Backlog getBacklog() {
+        return backlog;
+    }
+
+    public void setBacklog(Backlog backlog) {
+        this.backlog = backlog;
+    }
+
+
 
     public ProjectTask() {
     }
