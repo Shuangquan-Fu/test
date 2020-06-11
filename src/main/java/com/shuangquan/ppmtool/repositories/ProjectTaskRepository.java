@@ -7,4 +7,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ProjectTaskRepository extends CrudRepository<ProjectTask,Long> {
     public Iterable<ProjectTask> findByProjectIdentifierOrderByPriority(String projectIdentifier);
+
+    ProjectTask findByProjectSequence(String sequence);
 }
