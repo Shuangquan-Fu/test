@@ -21,11 +21,14 @@ public class ProjectService {
             project.setProjectIdentifier(project.getProjectIdentifier().toUpperCase());
 
             if(project.getId() == null){
+                System.out.println("id == null");
                 Backlog backlog = new Backlog();
                 project.setBacklog(backlog);
+                backlog.setProject(project);
                 backlog.setProjectIdentifier(project.getProjectIdentifier().toUpperCase());
             }
             if(project.getId() != null){
+                System.out.println("id != null ");
                 project.setBacklog(backlogRepository.findByProjectIdentifier(project.getProjectIdentifier().toUpperCase()));
             }
             return projectRepository.save(project);

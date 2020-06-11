@@ -9,9 +9,9 @@ import java.util.Date;
 @Entity
 public class ProjectTask {
     @Id
-    @GeneratedValue(strategy =  GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(updatable = false,unique = true)
+    @Column(updatable = false, unique = true)
     private String projectSequence;
     @NotBlank(message = "Please include a project summary")
     private String summary;
@@ -19,24 +19,16 @@ public class ProjectTask {
     private String status;
     private Integer priority;
     private Date dueDate;
-    private Date create_At;
-    private Date update_At;
-    //many to one with backlog
-    @Column(updatable = false)
-    private String projectIdentifier;
-
-    @ManyToOne(fetch = FetchType.EAGER,cascade = CascadeType.REFRESH)
+    //ManyToOne with Backlog
+    @ManyToOne(fetch = FetchType.EAGER) //REMOVE REFRESH
+    @JoinColumn(name="backlog_id", updatable = false, nullable = false)
     @JsonIgnore
     private Backlog backlog;
-    public Backlog getBacklog() {
-        return backlog;
-    }
 
-    public void setBacklog(Backlog backlog) {
-        this.backlog = backlog;
-    }
-
-
+    @Column(updatable = false)
+    private String projectIdentifier;
+    private Date create_At;
+    private Date update_At;
 
     public ProjectTask() {
     }
@@ -97,6 +89,14 @@ public class ProjectTask {
         this.dueDate = dueDate;
     }
 
+    public String getProjectIdentifier() {
+        return projectIdentifier;
+    }
+
+    public void setProjectIdentifier(String projectIdentifier) {
+        this.projectIdentifier = projectIdentifier;
+    }
+
     public Date getCreate_At() {
         return create_At;
     }
@@ -113,12 +113,12 @@ public class ProjectTask {
         this.update_At = update_At;
     }
 
-    public String getProjectIdentifier() {
-        return projectIdentifier;
+    public Backlog getBacklog() {
+        return backlog;
     }
 
-    public void setProjectIdentifier(String projectIdentifier) {
-        this.projectIdentifier = projectIdentifier;
+    public void setBacklog(Backlog backlog) {
+        this.backlog = backlog;
     }
 
     @PrePersist
@@ -141,9 +141,10 @@ public class ProjectTask {
                 ", status='" + status + '\'' +
                 ", priority=" + priority +
                 ", dueDate=" + dueDate +
+                ", backlog=" + backlog +
+                ", projectIdentifier='" + projectIdentifier + '\'' +
                 ", create_At=" + create_At +
                 ", update_At=" + update_At +
-                ", projectIdentifier='" + projectIdentifier + '\'' +
                 '}';
     }
 }

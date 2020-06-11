@@ -9,4 +9,5 @@ public interface ProjectTaskRepository extends CrudRepository<ProjectTask,Long> 
     public Iterable<ProjectTask> findByProjectIdentifierOrderByPriority(String projectIdentifier);
 
     ProjectTask findByProjectSequence(String sequence);
+    public void deleteByProjectIdentifier(String projectIdentifier);
 }

@@ -10,6 +10,8 @@ import com.shuangquan.ppmtool.repositories.ProjectTaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ProjectTaskService {
     @Autowired
@@ -52,15 +54,28 @@ public class ProjectTaskService {
         if(backlog == null) {
             throw new ProjectNotFoundException("The project with ID: "+ backlogId + " dose not exist");
         }
-        ProjectTask projectTask = projectTaskRepository.findByProjectSequence(sequence);
-        if(projectTask == null) {
+        ProjectTask project = projectTaskRepository.findByProjectSequence(sequence);
+        if(project == null) {
             throw new ProjectNotFoundException("Project Task with ID: "+sequence + "does not found" );
         }
-        if(projectTask.getProjectIdentifier() != backlogId){
+        if(!backlogId.equals(project.getProjectIdentifier())){
+            System.out.println(project.getProjectIdentifier());
+            System.out.println(backlogId);
             throw new ProjectNotFoundException("Project Task with ID: "+sequence + "does not exist in project" + backlogId);
         }
 
-        return projectTask;
+        return project;
+    }
+    public ProjectTask updateProjectTask(ProjectTask updatedProject,String backlogId,String pptId){
+        ProjectTask projectTask1 = findProjectTaskBySequence(backlogId,pptId);
+        projectTask1 = updatedProject;
+        ProjectTask updated = projectTaskRepository.save(projectTask1);
+        return updated;
     }
 
+    public void deleteProjectTask(String backlogId, String pptId){
+        ProjectTask projectTask = findProjectTaskBySequence(backlogId,pptId);
+
+        projectTaskRepository.delete(projectTask);
+    }
 }
