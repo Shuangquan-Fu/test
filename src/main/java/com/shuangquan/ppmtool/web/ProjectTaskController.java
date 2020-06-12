@@ -22,13 +22,18 @@ public class ProjectTaskController {
     @Autowired
     private MapValidationErrorService mapValidationErrorService;
     @PostMapping("/{backlog_id}")
-    public ResponseEntity<?> addProjectTask(@Valid @RequestBody ProjectTask projectTask, @PathVariable String backlog_id, BindingResult result){
-        ResponseEntity<?> errMap = mapValidationErrorService.MapValidationErrorService(result);
-        if(errMap != null){
-            return errMap;
-        }
-        ProjectTask projectTask1 = projectTaskService.addProjectTask(backlog_id,projectTask);
+    public ResponseEntity<?> addPTtoBacklog(@Valid @RequestBody ProjectTask projectTask,
+                                            BindingResult result, @PathVariable String backlog_id){
+        //show delete
+        //custom exception
+
+        ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
+        if (errorMap != null) return errorMap;
+
+        ProjectTask projectTask1 = projectTaskService.addProjectTask(backlog_id, projectTask);
+
         return new ResponseEntity<ProjectTask>(projectTask1, HttpStatus.CREATED);
+
     }
     @GetMapping("/{backlog_id}")
     public ResponseEntity<Iterable<ProjectTask>> findAllProjectTasks(@PathVariable String backlog_id){
@@ -45,7 +50,7 @@ public class ProjectTaskController {
     @PatchMapping("/{backlog_id}/{pt_id}")
     public ResponseEntity<?> updateProjectTask(@Valid @RequestBody ProjectTask updatedTask,@PathVariable String backlog_id,
                                                @PathVariable String pt_id,BindingResult result){
-        ResponseEntity<?> errMap = mapValidationErrorService.MapValidationErrorService(result);
+        ResponseEntity<?> errMap = mapValidationErrorService.MapValidationService(result);
         if(errMap != null){
             return errMap;
         }

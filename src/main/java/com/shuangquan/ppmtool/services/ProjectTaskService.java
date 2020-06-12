@@ -22,22 +22,35 @@ public class ProjectTaskService {
     private ProjectRepository projectRepository;
     public ProjectTask addProjectTask(String projectIdentifier, ProjectTask projectTask){
         try {
-            Backlog backlog = backlogRepository.findByProjectIdentifier(projectIdentifier.toUpperCase());
+            //PTs to be added to a specific project, project != null, BL exists
+            Backlog backlog = backlogRepository.findByProjectIdentifier(projectIdentifier);
+            //set the bl to pt
             projectTask.setBacklog(backlog);
-            Integer sequence = backlog.getPTSequence();
-            sequence ++;
-            backlog.setPTSequence(sequence);
-            projectTask.setProjectSequence(projectIdentifier + "-" + sequence);
+            //we want our project sequence to be like this: IDPRO-1  IDPRO-2  ...100 101
+            Integer BacklogSequence = backlog.getPTSequence();
+            // Update the BL SEQUENCE
+            BacklogSequence++;
+
+            backlog.setPTSequence(BacklogSequence);
+
+            //Add Sequence to Project Task
+            projectTask.setProjectSequence(backlog.getProjectIdentifier()+"-"+BacklogSequence);
             projectTask.setProjectIdentifier(projectIdentifier);
-            if(projectTask.getPriority() == null){
-                projectTask.setPriority(3);
-            }
-            if(projectTask.getStatus() == "" || projectTask.getStatus() == null){
+
+            //INITIAL priority when priority null
+
+            //INITIAL status when status is null
+            if(projectTask.getStatus()==""|| projectTask.getStatus()==null){
                 projectTask.setStatus("TO_DO");
             }
+
+            if(projectTask.getPriority()==null){ //In the future we need projectTask.getPriority()== 0 to handle the form
+                projectTask.setPriority(3);
+            }
+
             return projectTaskRepository.save(projectTask);
-        } catch (Exception e) {
-            throw new ProjectNotFoundException("Project Not Found");
+        }catch (Exception e){
+            throw new ProjectNotFoundException("Project not Found");
         }
 
     }
