@@ -2,9 +2,11 @@ package com.shuangquan.ppmtool.services;
 
 import com.shuangquan.ppmtool.domain.Backlog;
 import com.shuangquan.ppmtool.domain.Project;
+import com.shuangquan.ppmtool.domain.User;
 import com.shuangquan.ppmtool.exceptions.ProjectIdException;
 import com.shuangquan.ppmtool.repositories.BacklogRepository;
 import com.shuangquan.ppmtool.repositories.ProjectRepository;
+import com.shuangquan.ppmtool.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,9 +17,14 @@ public class ProjectService {
     private ProjectRepository projectRepository;
     @Autowired
     private BacklogRepository backlogRepository;
+    @Autowired
+    private UserRepository userRepository;
 
-    public Project saveOrUpdateProject(Project project){
+    public Project saveOrUpdateProject(Project project, String username){
         try {
+            User user =  userRepository.findByUsername(username);
+            project.setUser(user);
+            project.setProjectLeader(username);
             project.setProjectIdentifier(project.getProjectIdentifier().toUpperCase());
 
             if(project.getId() == null){
@@ -44,8 +51,8 @@ public class ProjectService {
         }
         return project;
     }
-    public Iterable<Project> findAllProject(){
-        Iterable<Project> projects = projectRepository.findAll();
+    public Iterable<Project> findAllProject(String username){
+        Iterable<Project> projects = projectRepository.findByProjectLeader(username);
         return projects;
     }
     public void deleteProjectByIdentifier(String projectId){

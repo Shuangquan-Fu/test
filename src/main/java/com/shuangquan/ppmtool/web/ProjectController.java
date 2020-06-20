@@ -33,7 +33,7 @@ public class ProjectController {
         if(responseEntity != null){
             return responseEntity;
         }
-        Project project1 = projectService.saveOrUpdateProject(project);
+        Project project1 = projectService.saveOrUpdateProject(project,principal.getName());
         return new ResponseEntity<Project>(project1, HttpStatus.CREATED);
     }
     @GetMapping("/{projectId}")
@@ -43,7 +43,7 @@ public class ProjectController {
     }
 
     @GetMapping("/all")
-    public Iterable<Project> getAllProjects(){return projectService.findAllProject();}
+    public Iterable<Project> getAllProjects(Principal principal){return projectService.findAllProject(principal.getName());}
 
     @DeleteMapping("/{projectId}")
     public ResponseEntity<?> deleteProject(@PathVariable String projectId){
