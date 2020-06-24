@@ -59,7 +59,9 @@ public class ProjectService {
         if(project == null){
             throw new ProjectIdException(" Project dose not exist");
         }
-        if(project.getProjectLeader() != username ){
+        if(!username.equals(project.getProjectLeader()) ){
+            System.out.println(username);
+            System.out.println(project.getProjectLeader());
             throw new ProjectNotFoundException("Project not found in your account");
         }
         return project;
